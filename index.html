@@ -23,21 +23,15 @@
         <span>AgriFlow</span>
       </div>
 
-      <nav>
-        <button class="nav active" data-view="overview">Overview</button>
-        <button class="nav" data-view="farm">1 · Farm Inventory</button>
-        <button class="nav" data-view="mfg">2 · Manufacturing</button>
-        <button class="nav" data-view="dist">3 · Distribution</button>
-        <button class="nav" data-view="cust">
-          4 · Customer Orders
-          <span id="cartBadge" class="pill" hidden>0</span>
-        </button>
+      <nav aria-label="Sections">
+        <button class="nav active" data-view="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span class="long">Overview</span><span class="short">Home</span></button>
+        <button class="nav" data-view="farm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-8 4-13 14-14 0 10-5 14-13 14z"/><path d="M5 19c3-5 6-8 10-10"/></svg><span class="long">Farm Inventory</span><span class="short">Farm</span></button>
+        <button class="nav" data-view="mfg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V10l6 4v-4l6 4V6h3v15z"/></svg><span class="long">Manufacturing</span><span class="short">Factory</span></button>
+        <button class="nav" data-view="dist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h11v10H2zM13 9h4l4 4v3h-8z"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg><span class="long">Distribution</span><span class="short">Ship</span></button>
+        <button class="nav" data-view="cust"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg><span class="long">Customer Orders</span><span class="short">Shop</span><span id="cartBadge" class="pill" hidden>0</span></button>
       </nav>
 
-      <div class="demo-note">
-        Front-end demo. Data is simulated and stored only in this browser (localStorage).
-        <button class="btn ghost sm" data-act="reset">Reset demo data</button>
-      </div>
+      <div class="demo-note"><span class="note-text">Front-end demo. Data is simulated and stored only in this browser (localStorage).</span><button class="btn ghost sm" data-act="reset">Reset demo</button></div>
     </aside>
 
     <main>
@@ -51,6 +45,12 @@
             <p>Follow a crop or by-product from the field to a finished product at the customer's door.</p>
             <button class="btn" data-go="farm">Start with farm inventory</button>
           </div>
+        </div>
+        <div class="flow" aria-label="Supply chain steps">
+          <button data-go="farm"><b>1</b><span>Farms<small>Harvest &amp; by-products</small></span></button>
+          <button data-go="mfg"><b>2</b><span>Manufacturers<small>Process &amp; track</small></span></button>
+          <button data-go="dist"><b>3</b><span>Distributors<small>Ship &amp; deliver</small></span></button>
+          <button data-go="cust"><b>4</b><span>Customers<small>Order &amp; receive</small></span></button>
         </div>
         <div id="stats" class="stats"></div>
         <div class="two">

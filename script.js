@@ -16,7 +16,8 @@ const IMAGE_URLS = {
   riceHusk: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSTx-X0KRvJa8pLbwHsjOTc07tuDHtlDeISTQwXNlbDu7reLN_2L_1tbF4&s=10",
   bagasse: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTODgWSUinqMVJemN7OBZX4nXLRMpnskHvBuqRvs_qzwQ&s=10",
   coconutHusk: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxnKa-kZHr8uRgsT9lp-4tzWyIanywfbGQ0Uj_1-dY2a9dUGZ_6qbgBqWo&s=10",
-  finishedProduct: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh-1rKRgCXeD45ebd1qVnpDF7VPpNnemvdCc3MxoAVmA&s=10"
+  finishedProduct: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh-1rKRgCXeD45ebd1qVnpDF7VPpNnemvdCc3MxoAVmA&s=10",
+  hero: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3snFUwVhRuZgbQAXd8HeS0yTWyigJehplhs-tlPyqXw&s=10" // optional wide photo for the Overview banner
 };
 
 /* =====================================================================
@@ -159,18 +160,33 @@ function toast(message, isError = false) {
   setTimeout(() => el.remove(), 3200);
 }
 
-const FALLBACK_IMG = "data:image/svg+xml," + encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">' +
-  '<rect width="400" height="300" fill="#e4ece4"/>' +
-  '<path d="M150 210c0-45 25-75 100-80-2 60-35 85-90 85z" fill="#1f7a54" opacity=".5"/>' +
-  '<text x="200" y="260" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#66716b">Image not available</text></svg>'
-);
+// Colour pairs for the generated placeholder tiles (used when no image link is set).
+const PALETTE = {
+  rice: ["#efe2b0", "#c9a227"], corn: ["#f8dc7a", "#e0a100"], sugarcane: ["#b5e07a", "#56ab2f"],
+  coconut: ["#dccbab", "#8b6b3e"], cassava: ["#ecdcc0", "#b08a5a"], riceHusk: ["#e8d8ab", "#a98a4b"],
+  bagasse: ["#dde8b8", "#7b9a3a"], coconutHusk: ["#d3bc96", "#7a5a35"], finishedProduct: ["#d3eadb", "#1f7a54"]
+};
 
-// Only real HTTPS links are used; everything else shows the placeholder.
+// Builds a clean gradient tile with a leaf icon and the item name.
+function placeholder(key, label) {
+  const [c1, c2] = PALETTE[key] || ["#dbe7dc", "#1f7a54"];
+  const text = String(label).replace(/[<>&"']/g, "").slice(0, 26);
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">' +
+    `<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs>` +
+    '<rect width="400" height="300" fill="url(#g)"/>' +
+    '<circle cx="330" cy="60" r="90" fill="#fff" opacity=".14"/><circle cx="60" cy="300" r="110" fill="#fff" opacity=".1"/>' +
+    '<path d="M150 190c0-50 28-85 110-92-2 66-38 96-98 96z" fill="#fff" opacity=".55"/>' +
+    '<path d="M150 190c30-38 62-62 100-80" stroke="#14392b" stroke-opacity=".35" stroke-width="5" fill="none" stroke-linecap="round"/>' +
+    `<text x="22" y="272" font-family="sans-serif" font-size="22" font-weight="700" fill="#14392b" fill-opacity=".8">${text}</text></svg>`;
+  return "data:image/svg+xml," + encodeURIComponent(svg);
+}
+
+// Real HTTPS links are used first; if one is missing or fails, the tile is shown.
 function img(key, alt) {
   const url = IMAGE_URLS[key] || "";
-  const src = /^https:\/\//.test(url) ? url : FALLBACK_IMG;
-  return `<img src="${esc(src)}" alt="${esc(alt)}" loading="lazy" onerror="this.onerror=null;this.src=FALLBACK_IMG">`;
+  const fallback = placeholder(key, alt);
+  const src = /^https:\/\//.test(url) ? esc(url) : fallback;
+  return `<img src="${src}" data-fb="${fallback}" alt="${esc(alt)}" loading="lazy" onerror="this.onerror=null;this.src=this.dataset.fb">`;
 }
 
 /* =====================================================================
@@ -801,5 +817,13 @@ $("#ships").addEventListener("change", (event) => {
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") closeModal();
 });
+
+// Optional hero photo from the IMAGE_URLS block.
+if (/^https:\/\//.test(IMAGE_URLS.hero || "")) {
+  const hero = $(".hero");
+  hero.style.backgroundImage = `linear-gradient(120deg, rgba(20,57,43,.88), rgba(31,122,84,.7)), url("${encodeURI(IMAGE_URLS.hero)}")`;
+  hero.style.backgroundSize = "cover";
+  hero.style.backgroundPosition = "center";
+}
 
 renderAll();
