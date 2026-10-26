@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AgriFlow · Farm-to-Market Supply Chain (Demo)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- ===== Sidebar navigation ===== -->
+    <aside class="side" aria-label="Main navigation">
+      <div class="brand">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M5 19c0-8 4-13 14-14 0 10-5 14-13 14z" />
+          <path d="M5 19c3-5 6-8 10-10" />
+        </svg>
+        <span>AgriFlow</span>
+      </div>
+
+      <nav>
+        <button class="nav active" data-view="overview">Overview</button>
+        <button class="nav" data-view="farm">1 · Farm Inventory</button>
+        <button class="nav" data-view="mfg">2 · Manufacturing</button>
+        <button class="nav" data-view="dist">3 · Distribution</button>
+        <button class="nav" data-view="cust">
+          4 · Customer Orders
+          <span id="cartBadge" class="pill" hidden>0</span>
+        </button>
+      </nav>
+
+      <div class="demo-note">
+        Front-end demo. Data is simulated and stored only in this browser (localStorage).
+        <button class="btn ghost sm" data-act="reset">Reset demo data</button>
+      </div>
+    </aside>
+
+    <main>
+
+      <!-- ===== Overview ===== -->
+      <section id="view-overview" class="view active">
+        <div class="hero">
+          <div>
+            <p class="eyebrow">Farms → Manufacturers → Distributors → Customers</p>
+            <h1>Less waste. Full traceability. One connected chain.</h1>
+            <p>Follow a crop or by-product from the field to a finished product at the customer's door.</p>
+            <button class="btn" data-go="farm">Start with farm inventory</button>
+          </div>
+        </div>
+        <div id="stats" class="stats"></div>
+        <div class="two">
+          <div class="card">
+            <h3>Recent activity</h3>
+            <ul id="activity" class="feed"></ul>
+          </div>
+          <div class="card">
+            <h3>Chain status</h3>
+            <div id="chain"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 1. Farm inventory ===== -->
+      <section id="view-farm" class="view">
+        <header class="vh">
+          <h2>Farm &amp; Agricultural Inventory</h2>
+          <button class="btn" data-act="addItem">+ Add item</button>
+        </header>
+        <div class="toolbar">
+          <input id="fq" type="search" placeholder="Search by name…" aria-label="Search inventory">
+          <select id="fcat" aria-label="Category">
+            <option value="all">All types</option>
+            <option value="crop">Crops</option>
+            <option value="waste">Agri waste / by-products</option>
+          </select>
+          <select id="floc" aria-label="Location"></select>
+          <select id="fav" aria-label="Availability">
+            <option value="all">Any availability</option>
+            <option value="available">Available</option>
+            <option value="low">Low stock</option>
+            <option value="out">Out of stock</option>
+          </select>
+          <select id="fsort" aria-label="Sort">
+            <option value="name">Sort: name</option>
+            <option value="qty">Sort: quantity</option>
+          </select>
+        </div>
+        <div id="invGrid" class="grid"></div>
+      </section>
+
+      <!-- ===== 2. Manufacturing ===== -->
+      <section id="view-mfg" class="view">
+        <header class="vh">
+          <h2>Manufacturing &amp; Production</h2>
+        </header>
+        <h3>Material opportunities</h3>
+        <div id="oppGrid" class="grid"></div>
+        <h3>Production tracking</h3>
+        <div id="orders"></div>
+      </section>
+
+      <!-- ===== 3. Distribution ===== -->
+      <section id="view-dist" class="view">
+        <header class="vh">
+          <h2>Distribution &amp; Logistics</h2>
+        </header>
+        <p class="muted">Delivery methods and providers are illustrative; tracking is simulated (no GPS or courier integration).</p>
+        <div class="toolbar">
+          <input id="sq" type="search" placeholder="Search shipment, product, destination…" aria-label="Search shipments">
+          <select id="sst" aria-label="Status"></select>
+          <select id="smt" aria-label="Method"></select>
+        </div>
+        <div id="ships"></div>
+      </section>
+
+      <!-- ===== 4. Customer orders ===== -->
+      <section id="view-cust" class="view">
+        <header class="vh">
+          <h2>Customer Orders &amp; Fulfillment</h2>
+        </header>
+        <div class="two wide">
+          <div id="prodGrid" class="grid"></div>
+          <aside class="card cart">
+            <h3>Your cart</h3>
+            <div id="cart"></div>
+          </aside>
+        </div>
+        <h3>My orders</h3>
+        <div id="custOrders"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Modal + toast containers -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="sheet" id="sheet"></div>
+  </div>
+  <div id="toasts" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
